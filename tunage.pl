@@ -30,7 +30,7 @@ sub playAlbum {
 
 	$x =<<EOF;
 tell application $itunes
-	set myTracks to (file tracks of library playlist 1 where album is $album)
+	set myTracks to (tracks where album is $album)
 	
 	if (myTracks = {}) then
 		return "No album by that name"
@@ -39,13 +39,11 @@ tell application $itunes
 	if exists (playlist $xscratchx of first source) then
 		delete (playlist $xscratchx of first source)
 	end if
-	set myPlaylist to make new playlist with properties {name: $xscratchx}
+	set myPlaylist to make new user playlist with properties {name: $xscratchx}
 
-	set myTrackLocations to {}
 	repeat with aTrack in myTracks
-		set myTrackLocations to myTrackLocations & (location of aTrack as list)
+		duplicate aTrack to myPlaylist
 	end repeat
-	add myTrackLocations to myPlaylist
 
 	play myPlaylist
 end tell
@@ -62,7 +60,7 @@ sub playArtist {
 
 	$x =<<EOF;
 tell application $itunes 
-	set myTracks to (file tracks of library playlist 1 where artist is $artist)
+	set myTracks to (tracks where artist is $artist)
 	
 	if (myTracks = {}) then
 		return "No artist by that name"
@@ -71,13 +69,11 @@ tell application $itunes
 	if exists (playlist $xscratchx of first source) then
 		delete (playlist $xscratchx of first source)
 	end if
-	set myPlaylist to make new playlist with properties {name: $xscratchx}
+	set myPlaylist to make new user playlist with properties {name: $xscratchx}
 
-	set myTrackLocations to {}
 	repeat with aTrack in myTracks
-		set myTrackLocations to myTrackLocations & (location of aTrack as list)
+		duplicate aTrack to myPlaylist
 	end repeat
-	add myTrackLocations to myPlaylist
 
 	play myPlaylist
 end tell
@@ -176,7 +172,7 @@ sub listAlbumsForArtist {
 	$x =<<EOF;
 tell application $itunes
 	set sList to {}
-	set sTracks to (file tracks of library playlist 1 where artist is $flag)
+	set sTracks to (tracks where artist is $flag)
         
         repeat with sTrack in sTracks
 		set sMot to (album of sTrack)
@@ -199,7 +195,7 @@ sub listTracksForAlbum {
 	$x =<<EOF;
 tell application $itunes
 	set sList to {}
-	set sTracks to (file tracks of library playlist 1 where album is $flag)
+	set sTracks to (tracks where album is $flag)
         
         repeat with sTrack in sTracks
 		set sMot to (name of sTrack)
@@ -222,7 +218,7 @@ sub lister {
 	$x =<<EOF;
 tell application $itunes
 	set sList to {}
-	set sTracks to (file tracks of library playlist 1 where $flag is not $empty)
+	set sTracks to (tracks where $flag is not $empty)
         
         repeat with sTrack in sTracks
 		set sMot to ($flag of sTrack)
